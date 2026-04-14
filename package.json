@@ -1,6 +1,18 @@
 {
   "dependencies": {
+    "express": "^5.2.1",
     "sqlite": "^5.1.1",
-    "sqlite3": "^6.0.1"
+    "sqlite3": "^6.0.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^6.0.2"
+  },
+  "devDependencies": {
+    "@types/node": "^25.6.0",
+    "@types/bun": "latest"
+  },
+  "name": "api_13_04",
+  "private": true,
+  "peerDependencies": {
+    "typescript": "^5"
   }
 }
