@@ -1,43 +1,18 @@
-import sqlite3 from 'sqlite3';
-import { open } from 'sqlite';
+import { run } from './database.ts'
 import { Item } from './classes.ts'
 
 
-async function run() {
-    const db = await open({
-        filename: './database',
-        driver: sqlite3.Database
-    });
-    return db;
-}
-
-
-async function createTable() {
-    const db = await run();
-
-    const table = await db.exec(`CREATE TABLE IF NOT EXISTS estoque (
-                    id INTEGER PRIMARY KEY,
-                    nome TEXT NOT NULL,
-                    quantidade INTEGER NOT NULL,
-                    preco INTEGER NOT NULL
-                )`
-            );
-    return table;
-}
-
-
 // GET
-async function showTable() {
-    const db = await run();
+function showTable() {
+    const db = run();
 
-    const table = await db.all(`SELECT * FROM estoque`);
-    return table;
+    return db.query(`SELECT * FROM estoque`).all();
 }
 
 
 // POST
-async function  insertItem(params: any) {
-    const db = await run();
+function  insertItem(params: any) {
+    const db = run();
 
     params.preco = parseInt(params.preco) * 100;
     params.quantidade = parseInt(params.quantidade);
@@ -46,7 +21,7 @@ async function  insertItem(params: any) {
                           params.quantidade,
                           params.preco);
 
-    const item_insertion = await db.run(`INSERT INTO estoque
+    const item_insertion = db.run(`INSERT INTO estoque
                                (nome, quantidade, preco)
                                VALUES (?, ?, ?)`,
                                [item.nome,
@@ -57,8 +32,8 @@ async function  insertItem(params: any) {
 
 
 // PUT
-async function updateItem(params: any) {
-    const db = await run();
+function updateItem(params: any) {
+    const db = run();
 
     params.preco = parseInt(params.preco) * 100;
     params.quantidade = parseInt(params.quantidade);
@@ -67,7 +42,7 @@ async function updateItem(params: any) {
                           params.quantidade,
                           params.preco);
 
-    const item_update = await db.run(`UPDATE estoque
+    const item_update = db.run(`UPDATE estoque
                                SET nome = ?,
                                    quantidade = ?,
                                    preco = ?
@@ -81,13 +56,13 @@ async function updateItem(params: any) {
 
 
 // DELETE
-async function deleteItem(params: any) {
-    const db = await run();
+function deleteItem(params: any) {
+    const db = run();
 
-    const item_deletion = await db.run(`DELETE FROM estoque
+    const item_deletion = db.run(`DELETE FROM estoque
                                WHERE id = ?`,
                                [params.id]);
     return item_deletion;
 }
 
-export { createTable, showTable, insertItem, updateItem, deleteItem }
+export { showTable, insertItem, updateItem, deleteItem }
